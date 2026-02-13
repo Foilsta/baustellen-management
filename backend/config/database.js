@@ -16,13 +16,13 @@ const sequelize = databaseUrl
         dialectOptions: {
             ssl: {
                 require: true,
-                rejectUnauthorized: false // Required for connecting to most cloud DBs
+                rejectUnauthorized: false
             }
         },
         define: {
             timestamps: true,
             underscored: false,
-        },
+        }
     })
     : new Sequelize({
         dialect: 'sqlite',
