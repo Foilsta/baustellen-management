@@ -9,6 +9,22 @@ import { logActivity } from '../middleware/activityLogger.js';
 const router = express.Router();
 
 // Login
+// DEBUG: Check users
+router.get('/debug/users', async (req, res) => {
+    try {
+        const users = await User.findAll({
+            attributes: ['id', 'username', 'email', 'role'] // No passwords
+        });
+        res.json({
+            count: users.length,
+            users,
+            message: users.length === 0 ? 'NO USERS FOUND' : 'Users exist'
+        });
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
+
 router.post('/login', [
     body('usernameOrEmail').notEmpty().withMessage('Benutzername oder E-Mail erforderlich'),
     body('password').notEmpty().withMessage('Passwort erforderlich'),
