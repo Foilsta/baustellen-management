@@ -48,7 +48,6 @@ app.use((err, req, res, next) => {
     res.status(500).json({ error: 'Etwas ist schief gelaufen!' });
 });
 
-import { seedDatabase } from './utils/seeders.js';
 // Temporary Database Setup Route
 app.get('/api/setup-database', async (req, res) => {
     try {
