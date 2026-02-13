@@ -30,6 +30,16 @@ app.use(morgan('dev'));
 // Serve uploaded files
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
+// Temporary Database Setup Route
+app.get('/api/setup-database', async (req, res) => {
+    try {
+        await seedDatabase(false);
+        res.json({ message: 'Database seeded successfully', status: 'success' });
+    } catch (error) {
+        res.status(500).json({ error: 'Seeding failed', details: error.message });
+    }
+});
+
 // Routes
 app.use('/api/auth', authRoutes);
 app.use('/api/users', userRoutes);
@@ -48,15 +58,7 @@ app.use((err, req, res, next) => {
     res.status(500).json({ error: 'Etwas ist schief gelaufen!' });
 });
 
-// Temporary Database Setup Route
-app.get('/api/setup-database', async (req, res) => {
-    try {
-        await seedDatabase(false);
-        res.json({ message: 'Database seeded successfully', status: 'success' });
-    } catch (error) {
-        res.status(500).json({ error: 'Seeding failed', details: error.message });
-    }
-});
+
 
 // Database connection and server start
 async function startServer() {
