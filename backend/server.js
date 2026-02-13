@@ -12,6 +12,7 @@ import userRoutes from './routes/users.js';
 import taskRoutes from './routes/tasks.js';
 import materialRoutes from './routes/materials.js';
 import activityRoutes from './routes/activity.js';
+import { seedDatabase } from './utils/seeders.js';
 
 // Load environment variables
 dotenv.config();
@@ -47,8 +48,8 @@ app.use((err, req, res, next) => {
     res.status(500).json({ error: 'Etwas ist schief gelaufen!' });
 });
 
-// Temporary Database Setup Route
 import { seedDatabase } from './utils/seeders.js';
+// Temporary Database Setup Route
 app.get('/api/setup-database', async (req, res) => {
     try {
         await seedDatabase(false);
