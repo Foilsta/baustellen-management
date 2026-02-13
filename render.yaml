@@ -2,7 +2,7 @@ services:
   # Backend Service
   - type: web
     name: baustellen-backend
-    env: node
+    runtime: node
     rootDirectory: backend
     buildCommand: npm install
     startCommand: node server.js
