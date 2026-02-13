@@ -50,6 +50,17 @@ app.use((err, req, res, next) => {
     res.status(500).json({ error: 'Etwas ist schief gelaufen!' });
 });
 
+// DIRECT DEBUG ROUTE (Fallback)
+import { User } from './models/index.js';
+app.get('/debug-db', async (req, res) => {
+    try {
+        const users = await User.findAll({ attributes: ['username', 'email', 'role'] });
+        res.json({ status: 'Online', users });
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
+
 
 
 // Database connection and server start
