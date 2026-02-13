@@ -30,15 +30,7 @@ app.use(morgan('dev'));
 // Serve uploaded files
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
-// Temporary Database Setup Route
-app.get('/api/setup-database', async (req, res) => {
-    try {
-        await seedDatabase(false);
-        res.json({ message: 'Database seeded successfully', status: 'success' });
-    } catch (error) {
-        res.status(500).json({ error: 'Seeding failed', details: error.message });
-    }
-});
+
 
 // Routes
 app.use('/api/auth', authRoutes);
@@ -66,8 +58,13 @@ async function startServer() {
         await sequelize.authenticate();
         console.log('✓ Database connection established');
 
-        // Sync database (in production, use migrations instead)
-        // await sequelize.sync(); // Disabled because seeder handles it
+        // Sync database and seed if empty
+        try {
+            await seedDatabase(false);
+            console.log('✓ Database/Seeding check completed');
+        } catch (seedError) {
+            console.error('⚠️ Seeding failed but server is starting:', seedError);
+        }
         // console.log('✓ Database synchronized');
 
         app.listen(PORT, '0.0.0.0', () => {
