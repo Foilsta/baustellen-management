@@ -47,6 +47,17 @@ app.use((err, req, res, next) => {
     res.status(500).json({ error: 'Etwas ist schief gelaufen!' });
 });
 
+// Temporary Database Setup Route
+import { seedDatabase } from './utils/seeders.js';
+app.get('/api/setup-database', async (req, res) => {
+    try {
+        await seedDatabase(false);
+        res.json({ message: 'Database seeded successfully', status: 'success' });
+    } catch (error) {
+        res.status(500).json({ error: 'Seeding failed', details: error.message });
+    }
+});
+
 // Database connection and server start
 async function startServer() {
     try {
@@ -54,8 +65,8 @@ async function startServer() {
         console.log('✓ Database connection established');
 
         // Sync database (in production, use migrations instead)
-        await sequelize.sync();
-        console.log('✓ Database synchronized');
+        // await sequelize.sync(); // Disabled because seeder handles it
+        // console.log('✓ Database synchronized');
 
         app.listen(PORT, '0.0.0.0', () => {
             console.log(`\n🚀 Server is running on http://localhost:${PORT}`);
